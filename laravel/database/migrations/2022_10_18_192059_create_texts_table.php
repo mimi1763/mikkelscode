@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTranslatorsTable extends Migration
+class CreateTextsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateTranslatorsTable extends Migration
      */
     public function up()
     {
-        Schema::create('translators', function (Blueprint $table) {
+        Schema::create('texts', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
         });
@@ -26,6 +26,6 @@ class CreateTranslatorsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('translators');
+        Schema::dropIfExists('texts');
     }
 }
