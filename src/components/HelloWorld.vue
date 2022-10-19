@@ -35,7 +35,24 @@ export default {
   name: 'HelloWorld',
   props: {
     msg: String
-  }
+  },
+  methods:
+      /**
+       * callback handler of response from google custom search API
+       * url: https://www.googleapis.com/customsearch/v1?key=YOUR-KEY&cx=YOUR-CX&q=YOUR-QUERY&callback=hndlr
+       * strange add-on to cx, possibly necessary: :omuauf_lfve
+       * @param response
+       */
+      function hndlr(response) {
+        for (var i = 0; i < response.items.length; i++) {
+          var item = response.items[i];
+          // Make sure HTML in item.htmlTitle is escaped.
+          document.getElementById("content").append(
+              document.createElement("br"),
+              document.createTextNode(item.htmlTitle)
+          );
+        }
+      }
 }
 </script>
 
