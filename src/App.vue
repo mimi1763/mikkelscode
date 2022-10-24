@@ -1,6 +1,6 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Comics DB App"/>
+  <!--img alt="Vue logo" src="./assets/logo.png"-->
+  <HelloWorld msg="Collectibles Database"/>
 </template>
 
 <script>

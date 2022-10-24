@@ -1,7 +1,7 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <p>
+    <!--p>
       <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
     </p>
     <h3>Installed CLI Plugins</h3>
@@ -16,9 +16,8 @@
       <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
       <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+    </ul-->
     <div>
-      <pre>{{api_url}}</pre>
       <h3>Google Custom Search API</h3>
       <div class="input-group mb-3" style="display: flex; justify-content: center;">
         <input type="text"
@@ -35,7 +34,9 @@
           <tr>
             <td v-for="image in result" :key="image">
               <div style="padding: 5px;">
-                <img :src="image" alt="">
+                <a :href="image.image" target="_blank">
+                  <img :src="image.thumb" alt="">
+                </a>
               </div>
             </td>
           </tr>
@@ -65,20 +66,35 @@ export default {
           "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token"
         }
       }).then(response => {
-          this.setupImages(response.data);
+          this.setupImages(response.data)
       }).catch(error => {
-          console.log(error);
+          console.log(error)
       })
     },
     setupImages: function(data) {
-      this.result = [];
+      this.result = []
 
       data.items.forEach(item => {
         if (item.pagemap !== undefined) {
+          let newImage = {
+            thumb: null,
+            image: null
+          }
+
           if (item.pagemap.cse_thumbnail !== undefined) {
             if (item.pagemap.cse_thumbnail.length > 0) {
-              this.result.push(item.pagemap.cse_thumbnail[0].src)
+              newImage.thumb = item.pagemap.cse_thumbnail[0].src
             }
+          }
+
+          if (item.pagemap.cse_image !== undefined) {
+            if (item.pagemap.cse_image.length > 0) {
+              newImage.image = item.pagemap.cse_image[0].src
+            }
+          }
+
+          if (newImage.thumb) {
+            this.result.push(newImage)
           }
         }
       })
