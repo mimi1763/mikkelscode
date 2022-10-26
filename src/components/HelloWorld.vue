@@ -1,50 +1,62 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <!--p>
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul-->
     <div>
       <h3>Google Custom Search API</h3>
-      <div class="input-group mb-3" style="display: flex; justify-content: center;">
+      <div style="display: flex; justify-content: center;">
         <input type="text"
                v-model="searchText"
-               class="form-control">
-        <div class="input-group-append">
-          <button class="btn btn-primary"
+               class="input-box">
+        <div>
+          <button class="button-box bg-sky-500 hover:bg-sky-700 ..."
                   type="button"
+                  :disabled="!searchText"
                   v-on:click="doSearch()">Search</button>
         </div>
       </div>
-      <table class="table">
-        <tbody>
-          <tr>
-            <td v-for="image in result" :key="image">
-              <div style="padding: 5px;">
-                <a :href="image.image" target="_blank">
-                  <img :src="image.thumb" alt="">
-                </a>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="flex-center margin-top-20">
+        <table class="table">
+          <tbody>
+            <tr>
+              <td v-for="image in result.slice(0,5)" :key="image">
+                <div class="gcs_container">
+                  <a :href="image.image" target="_blank">
+                    <img class="gcs_image" :src="image.thumb" alt="">
+                  </a>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td v-for="image in result.slice(5,10)" :key="image">
+                <div class="gcs_container">
+                  <a :href="image.image" target="_blank">
+                    <img class="gcs_image" :src="image.thumb" alt="">
+                  </a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div v-if="result && result.length > 0">
+        <div class="flex-center">
+          <div>Page: {{ currentPage }}</div>
+        </div>
+
+        <div class="flex-center">
+          <button class="button-box"
+                  type="button"
+                  :disabled="currentPage === 1"
+                  v-on:click="doSearch(false, true)">Prev</button>
+          <button class="button-box margin-20"
+                  type="button"
+                  :disabled="currentPage > 9"
+                  v-on:click="doSearch(true, false)">Next</button>
+        </div>
+      </div>
     </div>
   </div>
-  <!--<component v-bind:is="script" :src="api_url" async></component>-->
 </template>
 
 <script>
@@ -58,7 +70,22 @@ export default {
     msg: String
   },
   methods: {
-    doSearch: function() {
+    doSearch: function(nextPage, prevPage) {
+      nextPage = nextPage || false
+      prevPage = prevPage || false
+
+      if (nextPage) {
+        this.currentPage++
+      } else if (prevPage) {
+        this.currentPage--
+
+        if (this.currentPage < 1) {
+          this.currentPage = 1
+        }
+      } else {
+        this.currentPage = 1
+      }
+
       axios.get(this.api_url, {
         headers: {
           "Access-Control-Allow-Origin": "*",
@@ -107,14 +134,17 @@ export default {
         const apiKey = 'AIzaSyAFdzTJ0NJ3sZptkNYPb7YETH-v2FUPjvM'
         const apiCx = 'c59c8903e3b6d47ab'
 
-        return '/customsearch/v1?key=' + apiKey + '&cx=' + apiCx + '&num=10&q=' + this.searchText
-        // return '/cse?cx=' + apiCx
+        const start = 1 + (10 * (this.currentPage - 1))
+
+        return '/customsearch/v1?key=' + apiKey + '&cx=' + apiCx + '&num=10&start=' + start + '&q=' + this.searchText
+        //alternative: https://cse.google.com/cse?cx=c59c8903e3b6d47ab#gsc.tab=1&gsc.sort=&gsc.q=tintin //separate page
       }
   },
   data() {
     return {
       searchText: '',
       result: [],
+      currentPage: 1
     }
   }
 }
@@ -134,5 +164,75 @@ li {
 }
 a {
   color: #42b983;
+}
+
+.margin-20 {
+  margin: 20px;
+}
+
+.margin-top-10 {
+  margin-top: 10px;
+}
+
+.margin-top-20 {
+  margin-top: 20px;
+}
+
+.margin-bottom-10 {
+  margin-bottom: 10px;
+}
+
+.margin-bottom-20 {
+  margin-bottom: 20px;
+}
+
+.flex-container {
+  display: flex;
+}
+
+.gcs_container {
+  width: 160px;
+  height: 160px;
+  padding: 10px;
+  margin: 15px;
+  border: #a0aec0 1px solid;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.gcs_image {
+  width: 100%;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /*flex-direction: column;*/
+}
+
+.button-box {
+  width: 6em;
+  height: 3.8vh;
+  padding: 8px;
+  border-radius: 8px;
+  color: whitesmoke;
+  background: cadetblue;
+  font-weight: bold;
+  position: relative;
+  top: 1vh;
+}
+
+button:disabled {
+  opacity: 20%;
+}
+
+.input-box {
+  width: 33%;
+  height: 3vh;
+  border: gray 1px solid;
+  border-radius: 8px;
+  margin: 10px;
+  padding: 4px;
 }
 </style>
