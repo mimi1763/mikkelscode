@@ -1,36 +1,36 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
+  <div class="bg-amber-200 p-10">
+    <h1 class="text-4xl subpixel-antialiased font-semibold text-red-700 tracking-wide">{{ msg }}</h1>
     <div>
-      <h3>Google Custom Search API</h3>
-      <div style="display: flex; justify-content: center;">
+      <div class="mt-10 flex place-content-center">
         <input type="text"
                v-model="searchText"
-               class="input-box">
+               class="py-2 text-sm rounded-full p-3 mr-3">
         <div>
-          <button class="button-box bg-sky-500 hover:bg-sky-700 ..."
+          <button class="bg-lime-500 px-5 py-2 text-sm rounded-full font-semibold text-white"
+                  :class="{ 'hover:bg-lime-700': searchText }"
                   type="button"
                   :disabled="!searchText"
                   v-on:click="doSearch()">Search</button>
         </div>
       </div>
-      <div class="flex-center margin-top-20">
+      <div class="flex place-content-center mt-4">
         <table class="table">
           <tbody>
             <tr>
               <td v-for="image in result.slice(0,5)" :key="image">
-                <div class="gcs_container">
+                <div class="gcs_container m-3 drop-shadow-lg">
                   <a :href="image.image" target="_blank">
-                    <img class="gcs_image" :src="image.thumb" alt="">
+                    <img class="w-full hover:opacity-60" :src="image.thumb" alt="">
                   </a>
                 </div>
               </td>
             </tr>
             <tr>
               <td v-for="image in result.slice(5,10)" :key="image">
-                <div class="gcs_container">
+                <div class="gcs_container m-3 drop-shadow-lg">
                   <a :href="image.image" target="_blank">
-                    <img class="gcs_image" :src="image.thumb" alt="">
+                    <img class="w-full hover:opacity-60" :src="image.thumb" alt="">
                   </a>
                 </div>
               </td>
@@ -40,18 +40,20 @@
       </div>
 
       <div v-if="result && result.length > 0">
-        <div class="flex-center">
+        <div class="flex place-content-center">
           <div>Page: {{ currentPage }}</div>
         </div>
 
-        <div class="flex-center">
-          <button class="button-box"
+        <div class="flex place-content-center">
+          <button class="bg-lime-500 px-5 py-2 text-sm rounded-full font-semibold text-white m-5"
+                  :class="{ 'hover:bg-lime-700': currentPage > 1 }"
                   type="button"
                   :disabled="currentPage === 1"
                   v-on:click="doSearch(false, true)">Prev</button>
-          <button class="button-box margin-20"
+          <button class="bg-lime-500 px-5 py-2 text-sm rounded-full font-semibold text-white m-5"
+                  :class="{ 'hover:bg-lime-700': currentPage < 10 }"
                   type="button"
-                  :disabled="currentPage > 9"
+                  :disabled="currentPage === 10"
                   v-on:click="doSearch(true, false)">Next</button>
         </div>
       </div>
@@ -193,10 +195,6 @@ a {
 .gcs_container {
   width: 160px;
   height: 160px;
-  padding: 10px;
-  margin: 15px;
-  border: #a0aec0 1px solid;
-  border-radius: 5px;
   overflow: hidden;
 }
 
@@ -204,35 +202,35 @@ a {
   width: 100%;
 }
 
-.flex-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /*flex-direction: column;*/
-}
+/*.flex-center {*/
+/*  display: flex;*/
+/*  align-items: center;*/
+/*  justify-content: center;*/
+/*  !*flex-direction: column;*!*/
+/*}*/
 
-.button-box {
-  width: 6em;
-  height: 3.8vh;
-  padding: 8px;
-  border-radius: 8px;
-  color: whitesmoke;
-  background: cadetblue;
-  font-weight: bold;
-  position: relative;
-  top: 1vh;
-}
+/*.button-box {*/
+/*  width: 6em;*/
+/*  height: 3.8vh;*/
+/*  padding: 8px;*/
+/*  border-radius: 8px;*/
+/*  color: whitesmoke;*/
+/*  background: cadetblue;*/
+/*  font-weight: bold;*/
+/*  position: relative;*/
+/*  top: 1vh;*/
+/*}*/
 
 button:disabled {
   opacity: 20%;
 }
 
-.input-box {
-  width: 33%;
-  height: 3vh;
-  border: gray 1px solid;
-  border-radius: 8px;
-  margin: 10px;
-  padding: 4px;
-}
+/*.input-box {*/
+/*  width: 33%;*/
+/*  height: 3vh;*/
+/*  border: gray 1px solid;*/
+/*  border-radius: 8px;*/
+/*  margin: 10px;*/
+/*  padding: 4px;*/
+/*}*/
 </style>
