@@ -67,7 +67,7 @@ import axios from 'axios';
 axios.defaults.baseURL = '';
 
 export default {
-  name: 'HelloWorld',
+  name: 'HomePage',
   props: {
     msg: String
   },

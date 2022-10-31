@@ -1,15 +1,14 @@
 <template>
-  <!--img alt="Vue logo" src="./assets/logo.png"-->
-  <HelloWorld msg="Collectibles Database"/>
+  <HomePage msg="Collectibles Database"/>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import HomePage from './components/HomePage.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    HomePage
   }
 }
 </script>
